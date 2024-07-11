@@ -1,5 +1,8 @@
 # Modality-Consistent Attention for Visible-infrared Vehicle Re-identification（2024 SPL）
 # Network Architecture
+
+![示例图片](https://github.com/nqian1/MCAforVIVR/main/modal1.png)
+
 # Requirements
 <figure style="background-color: black; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
     <figcaption style="color: white; font-weight: bold;">Requirements</figcaption>
