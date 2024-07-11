@@ -1,1 +1,36 @@
-# MCAforVIVR
+# Modality-Consistent Attention for Visible-infrared Vehicle Re-identification（2024 SPL）
+# Network Architecture
+# Requirements
+<figure style="background-color: black; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <figcaption style="color: white; font-weight: bold;">Requirements</figcaption>
+    <ul>
+        <li> PyTorch 1.7, CUDA 11.1, and Python 3.8</li>
+        <li>Ubuntu 18.04.5 LTS</li>
+        <li> GeForce RTX 3090 GPU</li>
+    </ul>
+</figure>
+
+# Training and Testing
+```html
+# Training Steps vivr trained on RGBN300 dataset
+rgbn300/lctrain_senl.py
+
+# Training Steps vivr trained on msvr310 dataset
+msvr310/lctrain_senl_msvr310.py
+
+
+#Testing Steps vivr tested on RGBN300 dataset
+rgbn300/test_senl.py
+
+# Training Steps vivr tested on msvr310 dataset
+msvr310/test_senl.py
+
+
+```
+# Acknowledgment
+```
+Thanks to Mang Ye's AGW Project {https://github.com/mangye16/Cross-Modal-Re-ID-baseline}
+
+
+
+
