@@ -18,18 +18,12 @@
 # Training Steps vivr trained on RGBN300 dataset
 rgbn300/lctrain_senl.py
 
-# Training Steps vivr trained on msvr310 dataset
-msvr310/lctrain_senl_msvr310.py
-
-
 #Testing Steps vivr tested on RGBN300 dataset
 rgbn300/test_senl.py
 
-# Training Steps vivr tested on msvr310 dataset
-msvr310/test_senl.py
 
 
 ```
 # Acknowledgment
 ```
-Our project is based on the AGW baseline {\url{https://github.com/mangye16/Cross-Modal-Re-ID-baseline}} by Mang Ye, and we are grateful for it.
+Our project is based on the AGW baseline {https://github.com/mangye16/Cross-Modal-Re-ID-baseline} by Mang Ye, and we are grateful for it.
