@@ -32,8 +32,4 @@ msvr310/test_senl.py
 ```
 # Acknowledgment
 ```
-Thanks to Mang Ye's AGW Project {https://github.com/mangye16/Cross-Modal-Re-ID-baseline}
-
-
-
-
+Our project is based on the AGW baseline {\url{https://github.com/mangye16/Cross-Modal-Re-ID-baseline}} by Mang Ye, and we are grateful for it.
