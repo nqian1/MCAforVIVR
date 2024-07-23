@@ -17,9 +17,12 @@
 ```html
 # Testing Steps vivr tested on RGBN300 dataset
 rgbn300/test_senl.py
-
-
-
+Adjust the 'data_path' = 'YOUR/DATASET/PATH'
+# Configuration
+confignl.py
+--mode 'v2t'(visible to infrared research mode) or 't2v'(infrared to visible research mode)
+--log_path 'cross_senlv1'
+--msew  '2'
 ```
 # Acknowledgment
 ```
