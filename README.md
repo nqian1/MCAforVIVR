@@ -1,7 +1,7 @@
 # Modality-Consistent Attention for Visible-infrared Vehicle Re-identification（2024 SPL）
 # Network Architecture
 
-![示例图片](https://github.com/nqian1/MCAforVIVR/blob/main/modal1.png)
+![示例图片](https://github.com/nqian1/MCAforVIVR/blob/main/framework.png)
 
 # Requirements
 <figure style="background-color: black; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -13,12 +13,9 @@
     </ul>
 </figure>
 
-# Training and Testing
+# Testing
 ```html
-# Training Steps vivr trained on RGBN300 dataset
-rgbn300/lctrain_senl.py
-
-#Testing Steps vivr tested on RGBN300 dataset
+# Testing Steps vivr tested on RGBN300 dataset
 rgbn300/test_senl.py
 
 
