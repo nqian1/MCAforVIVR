@@ -16,7 +16,7 @@
 # Testing
 ```html
 # Testing Steps vivr tested on RGBN300 dataset
-rgbn300/test_senl.py
+Run the test_senl.py
 Adjust the 'data_path' = 'YOUR/DATASET/PATH'
 
 # Configuration
