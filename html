@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>
+ComplexTextBench 标注
+</title>
+
+
+<style>
+
+
+body{
+
+    margin:20px;
+
+    font-family:
+    "Microsoft YaHei",
+    Arial;
+
+}
+
+
+
+.container{
+
+    display:flex;
+
+    gap:30px;
+
+}
+
+
+
+.left{
+
+    width:60%;
+
+}
+
+
+
+.right{
+
+    width:40%;
+
+}
+
+
+
+.image-box{
+
+    border:1px solid #ddd;
+
+    padding:10px;
+
+    text-align:center;
+
+}
+
+
+
+.image-box img{
+
+    max-width:100%;
+
+    max-height:750px;
+
+}
+
+
+
+textarea{
+
+    width:100%;
+
+    height:180px;
+
+    font-size:15px;
+
+}
+
+
+
+.card{
+
+    border:1px solid #ddd;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border-radius:8px;
+
+}
+
+
+
+.progress{
+
+    font-size:20px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+label{
+
+    display:block;
+
+    margin:8px;
+
+}
+
+
+
+button{
+
+    width:150px;
+
+    height:45px;
+
+    font-size:16px;
+
+}
+
+
+
+.user{
+
+    color:#555;
+
+    margin-bottom:15px;
+
+}
+
+
+
+input[type="text"]{
+
+    padding:5px;
+
+}
+
+
+.tip{
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+
+</style>
+
+
+
+<script>
+
+
+let categoryMap =
+{{ categories|tojson }};
+
+
+
+let draft =
+{{ draft|tojson }};
+
+
+
+
+
+function updateCategory(){
+
+
+    let domain =
+    document.getElementById(
+        "domain"
+    ).value;
+
+
+
+    let select =
+    document.getElementById(
+        "category"
+    );
+
+
+
+    select.innerHTML="";
+
+
+
+    categoryMap[domain].forEach(
+        function(x){
+
+
+            let option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value=x;
+
+            option.text=x;
+
+
+
+            if(
+                draft.category==x
+            ){
+
+                option.selected=true;
+
+            }
+
+
+
+            select.appendChild(
+                option
+            );
+
+
+        }
+    );
+
+
+
+    showCustomCategory();
+
+
+}
+
+
+
+
+
+function showCustomCategory(){
+
+
+    let category =
+    document.getElementById(
+        "category"
+    ).value;
+
+
+
+    let box =
+    document.getElementById(
+        "custom_category_box"
+    );
+
+
+
+    if(category=="其他"){
+
+
+        box.style.display="block";
+
+
+    }
+
+    else{
+
+
+        box.style.display="none";
+
+
+    }
+
+
+}
+
+
+
+
+
+
+function checkForm(){
+
+
+
+    let groups=[
+
+        "text_length",
+
+        "text_number",
+
+        "layout",
+
+        "semantic"
+
+    ];
+
+
+
+    for(
+        let i=0;
+        i<groups.length;
+        i++
+    ){
+
+
+        let checked =
+        document.querySelector(
+            'input[name="'+groups[i]+'"]:checked'
+        );
+
+
+
+        if(
+            checked==null
+        ){
+
+
+            alert(
+                "请完成所有复杂度标注！"
+            );
+
+
+            return false;
+
+
+        }
+
+
+    }
+
+
+
+    return true;
+
+
+}
+
+
+
+
+</script>
+
+
+</head>
+
+
+<body>
+
+
+
+    <div class="progress">
+    
+    ComplexTextBench 标注
+    
+    </div>
+    
+    
+    
+    
+    
+    <div class="user">
+    
+    
+    当前标注员：
+    
+    <b>
+    {{user}}
+    </b>
+    
+    
+    <br>
+    
+    
+    已完成标注：
+    
+    <b>
+    {{user_count}}
+    </b>
+    
+    / {{total_count}}
+    
+    
+    
+    <br>
+    
+    <span class="tip">
+    
+    上一张：保存当前选择，方便返回修改
+    
+    </span>
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    <div class="container">
+    
+    
+    
+    
+    
+    
+    
+    <!-- ================= -->
+    <!-- 左侧图片 -->
+    <!-- ================= -->
+    
+    <div class="left">
+    
+    
+    
+    <div class="image-box">
+    
+    
+    <img
+    
+    src="/image/{{item.image.split('/')[-1]}}"
+    
+    >
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    <h3>
+    
+    OCR文本
+    
+    </h3>
+    
+    
+    
+    <textarea readonly>
+    
+    {{item.text}}
+    
+    </textarea>
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- ================= -->
+    <!-- 右侧标注 -->
+    <!-- ================= -->
+    
+    
+    <div class="right">
+    
+    
+    
+    
+    
+    
+    
+    <form
+    
+    action="/save"
+    
+    method="post"
+    
+    onsubmit="return checkForm();"
+    
+    >
+    
+    
+    
+    
+    
+    <input
+    
+    type="hidden"
+    
+    name="user"
+    
+    value="{{user}}"
+    
+    >
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="card">
+    
+    
+    
+    <h3>
+    
+    一级类别 Domain
+    
+    </h3>
+    
+    
+    
+    
+    <select
+    
+    name="domain"
+    
+    id="domain"
+    
+    onchange="updateCategory()"
+    
+    style="width:220px;height:35px;"
+    
+    >
+    
+    
+    
+    {% for k in categories.keys() %}
+    
+    <option value="{{k}}"
+    
+    {% if draft.get("domain")==k %}
+    
+    selected
+    
+    {% endif %}
+    
+    >
+    
+    {{k}}
+    
+    </option>
+    
+    
+    {% endfor %}
+    
+    
+    
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    <h3>
+    
+    二级类别 Category
+    
+    </h3>
+    
+    
+    
+    
+    
+    <select
+    
+    name="category"
+    
+    id="category"
+    
+    onchange="showCustomCategory()"
+    
+    style="width:220px;height:35px;"
+    
+    >
+    
+    
+    
+    </select>
+    
+    
+    
+    
+    
+    
+    <br><br>
+    
+    
+    
+    
+    
+    <div
+    
+    id="custom_category_box"
+    
+    style="display:none;"
+    
+    >
+    
+    
+    
+    <label>
+    
+    其他类别名称：
+    
+    </label>
+    
+    
+    
+    
+    <input
+    
+    type="text"
+    
+    name="category_custom"
+    
+    id="category_custom"
+    
+    value="{{draft.get('category_custom','')}}"
+    
+    placeholder="例如：合同、证书、通知"
+    
+    style="width:220px;height:30px;"
+    
+    >
+    
+    
+    
+    </div>
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="card">
+    
+    
+    
+    <h3>
+    
+    Text Complexity
+    
+    </h3>
+    
+    
+    
+    
+    
+    <h4>
+    
+    Text Length
+    
+    </h4>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="text_length"
+    
+    value="短"
+    
+    {% if draft.get("text_length")=="短" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    短文本
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="text_length"
+    
+    value="中"
+    
+    {% if draft.get("text_length")=="中" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    中文本
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="text_length"
+    
+    value="长"
+    
+    {% if draft.get("text_length")=="长" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    长文本
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    <h4>
+    
+    Text Number
+    
+    </h4>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="text_number"
+    
+    value="单文本"
+    
+    {% if draft.get("text_number")=="单文本" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    单文本区域
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="text_number"
+    
+    value="多文本"
+    
+    {% if draft.get("text_number")=="多文本" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    多个文本区域
+    
+    </label>
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="card">
+    
+    
+    <h3>
+    
+    Layout Complexity
+    
+    </h3>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="layout"
+    
+    value="L1"
+    
+    {% if draft.get("layout")=="L1" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    L1 简单布局
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="layout"
+    
+    value="L2"
+    
+    {% if draft.get("layout")=="L2" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    L2 多文本块
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="layout"
+    
+    value="L3"
+    
+    {% if draft.get("layout")=="L3" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    L3 复杂布局
+    
+    </label>
+    
+    
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="card">
+    
+    
+    <h3>
+    
+    Semantic Complexity
+    
+    </h3>
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="semantic"
+    
+    value="普通"
+    
+    {% if draft.get("semantic")=="普通" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    普通文本
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="semantic"
+    
+    value="专业"
+    
+    {% if draft.get("semantic")=="专业" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    专业知识
+    
+    </label>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <label>
+    
+    <input
+    
+    type="radio"
+    
+    name="semantic"
+    
+    value="专家"
+    
+    {% if draft.get("semantic")=="专家" %}
+    
+    checked
+    
+    {% endif %}
+    
+    >
+    
+    专家级知识
+    
+    </label>
+    
+    
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <button
+    
+    type="submit"
+    
+    >
+    
+    保存下一张
+    
+    </button>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 上一张 -->
+    
+    <button
+    
+    type="submit"
+    
+    formaction="/previous"
+    
+    formmethod="post"
+    
+    >
+    
+    上一张
+    
+    </button>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 跳过 -->
+    
+    <a href="/skip?user={{user}}">
+    
+    <button
+    
+    type="button"
+    
+    >
+    
+    跳过
+    
+    </button>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+    </form>
+    
+    
+    
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
+    
+    
+    updateCategory();
+    
+    
+    showCustomCategory();
+    
+    
+    
+    </script>
+    
+    
+    
+    
+    
+    
+    </body>
+    
+    
+    </html>
